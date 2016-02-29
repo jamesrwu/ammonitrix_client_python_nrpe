@@ -56,7 +56,7 @@ class Nrpe (object):
                 command = match.group(2)
                 self.commands[name] = command
             else:
-                raise NrpeParseError("could not parse:\n{}".format(nrpe_conf))
+                raise NrpeParseError("Could not parse file: {}".format(file))
 
     def execute_commands(self):
         if len(self.commands) < 1:
@@ -90,8 +90,7 @@ class Nrpe (object):
         if not exception_in_cmd:
             return returncode, out.rstrip('\r\n')
         printcmdline = ' '.join(commandline)
-        raise NrpeExecutionError("Error executing command '{command}': {e}".
-                             format(command=printcmdline, e=e))
+        raise NrpeExecutionError("Error executing command '{command}': {e}".  format(command=printcmdline, e=e))
 
     def parse_nagiosresult(self, resultline):
         """parse the line(s) returned by nagios

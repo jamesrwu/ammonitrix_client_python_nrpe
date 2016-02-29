@@ -88,8 +88,7 @@ class Client(object):
         self.event = dict()
         self.event['name'] = self.name
         self.event['timestamp'] = self.get_timestamp()
-        self.event['next_timestamp_deadline'] = self.get_timestamp() + \
-                                                self.interval
+        self.event['interval'] = self.interval
         self.event['alert_individually'] = self.alert_individually
         self.event['check_data'] = self.check_data
         if len(self.tags) > 0:
@@ -98,10 +97,10 @@ class Client(object):
     def send_result(self):
         self.create_event()
         payload = json.dumps(self.event)
+        print("Sending payload: {}".format(payload))
         try:
             r = requests.put(self.get_server_url(), data=payload)
         except Exception as e:
             raise PostError("Error during post: {}".format(e))
         if r.status_code != 201:
-            raise PostError("Error during post; status {}".
-                            format(r.status_code))
+            raise PostError("Error during post; status {}".format(r.status_code))

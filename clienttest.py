@@ -4,16 +4,20 @@ from ammonitrixclient.client import *
 from ammonitrixclient.nrpe import *
 
 
-client = Client(name='laptopreinoud/testname')
+client = Client(name='clienttest.testname')
 
-client.set_server(server_hostname='10.41.4.124', protocol='http')
+client.set_server(server_hostname='localhost', protocol='http')
 
-nrpe = Nrpe('/etc/nagios/nrpe.d/')
+# This is a fake nrpe.d folder that sends simulated test results
+# for testing
+nrpe = Nrpe('nrpe.d/')
+#nrpe = Nrpe('/etc/nagios/nrpe.d')
 results = nrpe.execute_commands()
 
 for check, result in results.iteritems():
-    client.set_name('laptopreinoud/{}'.format(check))
+    name="clienttest.{}".format(check)
+    client.set_name(name)
     client.set_tags(['foo', 'bar', 1])
     client.set_check_data(result)
     client.send_result()
-    print "sent laptopreinoud/{}".format(check)
+    print "sent {}".format(name)
